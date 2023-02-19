@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -25,6 +25,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Timer from './TESTS/Timer';
+
+import { ThemeProvider } from "./TESTS/contexts/themeContext";
+import ThemeContext from "./TESTS/contexts/themeContext";
+import { lightTheme, darkTheme } from './TESTS/themes';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,8 +68,19 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const [theme, setTheme] = useState('dark');
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   return (
-    <Timer />
+    <ThemeProvider value={{ 
+      theme, 
+      toggleTheme, 
+      currentTheme: theme === 'light' ? lightTheme : darkTheme 
+      }}>
+        <Timer />
+      </ThemeProvider>
   );
 }
 
